@@ -1,7 +1,6 @@
 # ingredient_extractor.py
 
 import re
-from typing import Any
 
 
 START_PATTERNS = [
@@ -116,7 +115,14 @@ def looks_like_english_ingredient_list_start(line: str) -> bool:
 
     return matched_count >= 2
 
-def extract_ingredients(ocr_text: str) -> dict[str, Any]:
+def extract_ingredients(ocr_text: str) -> list[str]:
+    """OCR 전체 텍스트에서 원료명만 추출해 개별 문자열 목록으로 반환합니다."""
+    section, _ = extract_ingredient_section(ocr_text)
+    return split_ingredients(section)
+
+
+def extract_ingredient_details(ocr_text: str) -> dict[str, object]:
+    """추출 결과와 함께 진단용 메타데이터가 필요할 때 사용합니다."""
     section, method = extract_ingredient_section(ocr_text)
     ingredients = split_ingredients(section)
 
